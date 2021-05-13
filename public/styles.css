@@ -1,0 +1,10 @@
+#myInput:focus,.btn:focus {
+    outline: none!important;
+    box-shadow: none!important;
+}
+
+@media screen and (max-width: 1000px) {
+    #myInput,#col {
+        margin: 0 20px;
+    }
+}

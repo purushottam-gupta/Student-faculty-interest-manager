@@ -23,13 +23,6 @@
 
 <body class="bg-info container-fluid">
     <div class="row">
-        {{!-- <div id="alert" class="alert alert-success col-lg-8 offset-lg-2 alert-dismissible fade show"
-            style="display: none;" role="alert">
-            <strong>Successful!</strong> Your email has been sent successfully.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div> --}}
         <input type="text" class="form-control mt-1 col-lg-8 offset-lg-2" id="myInput" onkeyup="searchFun()"
             placeholder="Search by name or field of Interest...">
         <div class="col-lg-8 offset-lg-2" id="col" style="background-color:#fff;margin-top:25px;padding:20px;">
@@ -131,7 +124,7 @@
                                 <label for="name" class="col-form-label">Name of faculty</label>
                                 <input type="name" name="name" class="form-control" autocomplete="off">
                                 <label for="email" class="col-form-label">Email of faculty</label>
-                                <input type="email" name="email" class="form-control" id="recipient-name" autocomplete="off" required>
+                                <input type="email" name="email" class="form-control" autocomplete="off" required>
                             </div>
                             <button type="submit" class="btn btn-primary">ADD</button>
                         </form>
@@ -151,7 +144,7 @@
                         <form action='/newfaculty/delete' method="POST">
                             <div class="form-group">
                                 <label for="email" class="col-form-label">Email of faculty</label>
-                                <input type="email" name="email" class="form-control" id="recipient-name" placeholder="email of faculty to be removed" autocomplete="off" required>
+                                <input type="email" name="email" class="form-control" placeholder="email of faculty to be removed" autocomplete="off" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
@@ -185,14 +178,6 @@
                 }
             }
         }
-
-        /*var form = document.getElementById("myForm");
-        var alert = document.getElementById("alert");
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            alert.style.display = 'block';
-           // setTimeout(() => { location.reload() }, 10000)
-        });*/
 
         const myfns = (n,m) => {
                 if (n<=0) {

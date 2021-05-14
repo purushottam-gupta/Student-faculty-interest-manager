@@ -21,7 +21,9 @@ router.post('/newfaculty', async (req, res) => {
 router.post('/newfaculty/delete', async (req, res) => {
     try {
         await Newfaculty.findOneAndDelete({email: req.body.email})
-        await Register.findOneAndDelete({email: req.body.email})
+        if(await Register.findOneAndDelete({email: req.body.email})){
+            res.clearCookie('jwt')
+        }
         res.redirect('/faculty/list')
     } catch (err) {
         res.redirect('/faculty/list')

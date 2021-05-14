@@ -3,6 +3,7 @@ const router = new express.Router()
 const auth = require('../middleware/auth')
 const Faculty = require('../models/faculty')
 const Newfaculty = require('../models/newfaculty')
+const Register = require('../models/registers')
 const sendWelcomeEmail = require('../emails/account')
 
 router.post('/newfaculty', async (req, res) => {
@@ -20,6 +21,7 @@ router.post('/newfaculty', async (req, res) => {
 router.post('/newfaculty/delete', async (req, res) => {
     try {
         await Newfaculty.findOneAndDelete({email: req.body.email})
+        await Register.findOneAndDelete({email: req.body.email})
         res.redirect('/faculty/list')
     } catch (err) {
         res.redirect('/faculty/list')

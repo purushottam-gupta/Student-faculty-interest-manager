@@ -6,11 +6,24 @@ const Newfaculty = require('../models/newfaculty')
 const sendWelcomeEmail = require('../emails/account')
 
 router.post('/newfaculty', async (req, res) => {
+    try {
     const newfaculty = new Newfaculty()
     newfaculty.email = req.body.email
 
     await newfaculty.save()
-    res.render('faculty/list')
+    res.redirect('/faculty/list')
+    } catch (err) {
+        res.redirect('/faculty/list')
+    }
+})
+
+router.post('/newfaculty/delete', async (req, res) => {
+    try {
+        await Newfaculty.findOneAndDelete({email: req.body.email})
+        res.redirect('/faculty/list')
+    } catch (err) {
+        res.redirect('/faculty/list')
+    }
 })
 
 router.get('/faculty', auth, (req, res) => {

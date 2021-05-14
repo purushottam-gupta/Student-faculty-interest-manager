@@ -43,6 +43,9 @@
             <button type="button" class="btn btn-primary d-none {{display}} float-right mr-2" data-toggle="modal"
                 data-target="#exampleModal">Add New
                 Faculty</button>
+                <button type="button" class="btn btn-primary d-none {{display}} float-right mr-2" data-toggle="modal"
+                data-target="#exampleModal2">Delete
+                Faculty</button>
             <table class="table table-striped mt-2 overflow-hidden">
                 <thead>
                     <tr>
@@ -131,6 +134,26 @@
                                 <input type="email" name="email" class="form-control" id="recipient-name" autocomplete="off" required>
                             </div>
                             <button type="submit" class="btn btn-primary">ADD</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="exampleModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-body">
+                        <form action='/newfaculty/delete' method="POST">
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email of faculty</label>
+                                <input type="email" name="email" class="form-control" id="recipient-name" placeholder="email of faculty to be removed" autocomplete="off" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
                     </div>
                 </div>

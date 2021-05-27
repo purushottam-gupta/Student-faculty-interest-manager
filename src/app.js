@@ -6,7 +6,6 @@ const hbs = require('hbs')
 const cookieParser = require('cookie-parser');
 const registerRouter = require('./routers/registers')
 const facultyRouter = require('./routers/faculty')
-// const exphbs = require('express-handlebars');
 
 const app = express()
 const port = process.env.PORT || 3000

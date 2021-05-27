@@ -28,6 +28,9 @@ var facultySchema = new mongoose.Schema({
         type: String,
         required: 'This field is required.',
         trim: true
+    },
+    avatar: {
+        type: String
     }
 });
 

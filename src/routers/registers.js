@@ -65,8 +65,7 @@ router.post('/register', async (req, res) => {
         if (err.name == 'ValidationError') {
             handleValidationError(err, req.body);
             res.render('register', {
-            user: req.body,
-            // message: 'All of the above are required'
+            user: req.body
            })
         }   
     }
@@ -88,7 +87,7 @@ router.post('/login', async (req, res) => {
 
         const token = await user.generateAuthToken()
         res.cookie('jwt', token, {
-            expires: new Date(Date.now() + 180000),
+            expires: new Date(Date.now() + 300000),
             httpOnly: true,
             // secure: true //only store cookie for https server not for http 
         })

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+mongoose.set('runValidators', true);
+
 mongoose.connect(process.env.DB_NAME, {
     useNewUrlParser: true,
     useCreateIndex: true,

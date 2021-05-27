@@ -5,14 +5,16 @@ const Faculty = require('../models/faculty')
 const Newfaculty = require('../models/newfaculty')
 const Register = require('../models/registers')
 const sendWelcomeEmail = require('../emails/account')
+const multer = require('multer')
+const path = require('path');
 
 router.post('/newfaculty', async (req, res) => {
     try {
-    const newfaculty = new Newfaculty()
-    newfaculty.email = req.body.email
+        const newfaculty = new Newfaculty()
+        newfaculty.email = req.body.email
 
-    await newfaculty.save()
-    res.redirect('/faculty/list')
+        await newfaculty.save()
+        res.redirect('/faculty/list')
     } catch (err) {
         res.redirect('/faculty/list')
     }
@@ -20,8 +22,8 @@ router.post('/newfaculty', async (req, res) => {
 
 router.post('/newfaculty/delete', async (req, res) => {
     try {
-        await Newfaculty.findOneAndDelete({email: req.body.email})
-        if(await Register.findOneAndDelete({email: req.body.email})){
+        await Newfaculty.findOneAndDelete({ email: req.body.email })
+        if (await Register.findOneAndDelete({ email: req.body.email })) {
             res.clearCookie('jwt')
         }
         res.redirect('/faculty/list')
@@ -30,6 +32,26 @@ router.post('/newfaculty/delete', async (req, res) => {
     }
 })
 
+var Storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: Storage,
+    limits: {
+        fileSize: 3000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb('Please upload an image and it should be of size <3mb')
+        }
+        cb(undefined, true)
+    }
+}).single('avatar')
+
 router.get('/faculty', auth, (req, res) => {
     res.render("faculty/addOrEdit", {
         viewTitle: "Insert Faculty"
@@ -37,10 +59,20 @@ router.get('/faculty', auth, (req, res) => {
 });
 
 router.post('/faculty', auth, (req, res) => {
-    if (req.body._id == '')
-        insertRecord(req, res);
-    else
-        updateRecord(req, res);
+    upload(req, res, (err) => {
+        if (err) {
+            res.render("faculty/addOrEdit", {
+                viewTitle: "Insert Faculty",
+                error: err
+            });
+        }
+        else{
+            if (req.body._id == '')
+                insertRecord(req, res);
+            else
+                updateRecord(req, res);
+        }
+    })
 });
 
 
@@ -68,6 +100,7 @@ async function insertRecord(req, res) {
             faculty.email = req.body.email;
             faculty.entry = req.body.entry;
             faculty.fieldOfInterest = req.body.fieldOfInterest;
+            if(req.file) faculty.avatar = req.file.filename;
 
             await faculty.save();
             res.redirect('faculty/list');
@@ -80,18 +113,35 @@ async function insertRecord(req, res) {
                 });
             }
             else
-            res.render("faculty/addOrEdit", {
-                viewTitle: "Insert Faculty",
-                faculty: req.body,
-                message: 'Email already been used'
-            });
+                res.render("faculty/addOrEdit", {
+                    viewTitle: "Insert Faculty",
+                    faculty: req.body,
+                    message: 'Email already been used'
+                });
         }
     }
 }
 
 async function updateRecord(req, res) {
     try {
-        await Faculty.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true })
+        if (req.file) {
+            var data = {
+                fullName: req.body.fullName,
+                email: req.body.email,
+                entry: req.body.entry,
+                fieldOfInterest: req.body.fieldOfInterest,
+                avatar: req.file.filename
+            }
+        } else {
+            var data = {
+                fullName: req.body.fullName,
+                email: req.body.email,
+                entry: req.body.entry,
+                fieldOfInterest: req.body.fieldOfInterest
+            }
+        }
+
+        await Faculty.findOneAndUpdate({ _id: req.body._id }, data, { new: true })
         res.redirect('/faculty/list')
     } catch (err) {
         if (err.name == 'ValidationError') {
@@ -116,9 +166,10 @@ function handleValidationError(err, body) {
                 body['emailError'] = err.errors[field].message;
                 break;
             case 'fieldOfInterest':
-                body['fieldOfInterestError'] = err.errors[field].message;    
+                body['fieldOfInterestError'] = err.errors[field].message;
+                break;
             case 'entry':
-                body['entryError'] = err.errors[field].message;    
+                body['entryError'] = err.errors[field].message;
                 break;
             default:
                 break;
@@ -131,7 +182,7 @@ router.get('/faculty/list', auth, async (req, res) => {
         const docs = await Faculty.find({})
         res.render("faculty/list", {
             list: docs,
-            display: 'd-inline', 
+            display: 'd-inline',
             disnone: 'd-none'
         });
     }
@@ -166,7 +217,7 @@ router.get('/faculty/:id', auth, async (req, res) => {
 
 router.get('/faculty/delete/:id', auth, async (req, res) => {
     try {
-        const doc = await Faculty.findByIdAndRemove(req.params.id); 
+        const doc = await Faculty.findByIdAndRemove(req.params.id);
         res.redirect('/faculty/list')
     } catch (err) {
         console.log('Error in faculty delete :' + err);
@@ -175,13 +226,13 @@ router.get('/faculty/delete/:id', auth, async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     try {
-    const doc = await Faculty.findByIdAndUpdate({ _id: req.params.id }, {$inc: {entry: -1}},{new: true})
-    sendWelcomeEmail(doc.email, req.body.email, req.body.name, req.body.year, req.body.branch, req.body.clgName, req.body.purpose)
-    res.redirect('/')
+        const doc = await Faculty.findByIdAndUpdate({ _id: req.params.id }, { $inc: { entry: -1 } }, { new: true })
+        sendWelcomeEmail(doc.email, req.body.email, req.body.name, req.body.year, req.body.branch, req.body.clgName, req.body.purpose)
+        res.redirect('/')
     } catch (err) {
         res.redirect('/')
     }
 });
 
 
-module.exports = {router,Newfaculty};
+module.exports = { router, Newfaculty };

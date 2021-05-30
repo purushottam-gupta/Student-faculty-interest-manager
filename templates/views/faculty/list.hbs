@@ -23,9 +23,9 @@
 
 <body class="bg-info container-fluid">
     <div class="row">
-        <input type="text" class="form-control mt-1 col-lg-10 offset-lg-1" id="myInput" onkeyup="searchFun()"
+        <input type="text" class="form-control mt-1 col-lg-8 offset-lg-2" id="myInput" onkeyup="searchFun()"
             placeholder="Search by name or field of Interest...">
-        <div class="col-lg-10 offset-lg-1" id="col" style="background-color:#fff;margin-top:25px;padding:20px;">
+        <div class="col-lg-8 offset-lg-2" id="col" style="background-color:#fff;margin-top:25px;padding:20px;">
             <h3 class="d-inline"><a class="btn btn-secondary d-none {{display}}" href="/faculty"><i
                         class="fa fa-plus"></i> Create New</a>
                 Faculty List</h3>
@@ -44,7 +44,7 @@
                     <tr>
                         <th class="text-nowrap">Profile Pic</th>
                         <th class="text-nowrap">Full Name</th>
-                        <th class="text-nowrap">Email</th>
+                        {{!-- <th class="text-nowrap">Email</th> --}}
                         <th class="text-nowrap">Max. Entry</th>
                         <th class="text-nowrap">Field of Interest</th>
                         <th></th>
@@ -62,7 +62,7 @@
                             {{/if}}
                         </td>
                         <td>{{this.fullName}}</td>
-                        <td>{{this.email}}</td>
+                        {{!-- <td>{{this.email}}</td> --}}
                         <td>{{this.entry}}</td>
                         <td>{{this.fieldOfInterest}}</td>
                         <td class="text-nowrap">
@@ -171,11 +171,11 @@
             let tr = document.getElementsByTagName('tr');
 
             for (var i = 0; i < tr.length; i++) {
-                let td4 = tr[i].getElementsByTagName('td')[4]
+                let td3 = tr[i].getElementsByTagName('td')[3]
                 let td1 = tr[i].getElementsByTagName('td')[1];
 
-                if (td4) {
-                    let textvalue = td4.textContext || td4.innerHTML
+                if (td3) {
+                    let textvalue = td3.textContext || td3.innerHTML
                     let textvalue1 = td1.textContext || td1.innerHTML
 
                     if (textvalue.toUpperCase().indexOf(filter) > -1 || textvalue1.toUpperCase().indexOf(filter) > -1) {

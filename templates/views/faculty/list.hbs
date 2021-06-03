@@ -29,16 +29,14 @@
             <h3 class="d-inline"><a class="btn btn-secondary d-none {{display}}" href="/faculty"><i
                         class="fa fa-plus"></i> Create New</a>
                 Faculty List</h3>
-            <button class="btn btn-danger d-none {{display}} float-right"><a href="/logout"
+            <button class="btn btn-warning d-none {{display}} float-right"><a href="/logout"
                     class="text-light text-decoration-none">Logout</a></button>
             <button class="btn btn-primary {{disnone}} float-right mr-2"><a href="/faculty/list"
                     class="text-light text-decoration-none">Sign-in as Faculty</a></button>
             <button type="button" class="btn btn-primary d-none {{display}} float-right mr-2" data-toggle="modal"
                 data-target="#exampleModal">Add New
                 Faculty</button>
-                <button type="button" class="btn btn-primary d-none {{display}} float-right mr-2" data-toggle="modal"
-                data-target="#exampleModal2">Delete
-                Faculty</button>
+                 <button class="btn btn-danger d-none {{display}} float-right mr-2" onclick="return confirm('Are you sure to delete your account permanently?');"><a href="/user/delete" class="text-decoration-none text-light">Delete My account</a></button>
             <table class="table table-striped mt-2 overflow-hidden">
                 <thead>
                     <tr>
@@ -135,26 +133,6 @@
                                 <input type="email" name="email" class="form-control" autocomplete="off" required>
                             </div>
                             <button type="submit" class="btn btn-primary">ADD</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="exampleModal2">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-body">
-                        <form action='/newfaculty/delete' method="POST">
-                            <div class="form-group">
-                                <label for="email" class="col-form-label">Email of faculty</label>
-                                <input type="email" name="email" class="form-control" placeholder="email of faculty to be removed" autocomplete="off" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
                     </div>
                 </div>

@@ -8,24 +8,12 @@ const sendWelcomeEmail = require('../emails/account')
 const multer = require('multer')
 const path = require('path');
 
-router.post('/newfaculty', async (req, res) => {
+router.post('/newfaculty',auth, async (req, res) => {
     try {
         const newfaculty = new Newfaculty()
         newfaculty.email = req.body.email
 
         await newfaculty.save()
-        res.redirect('/faculty/list')
-    } catch (err) {
-        res.redirect('/faculty/list')
-    }
-})
-
-router.post('/newfaculty/delete', async (req, res) => {
-    try {
-        await Newfaculty.findOneAndDelete({ email: req.body.email })
-        if (await Register.findOneAndDelete({ email: req.body.email })) {
-            res.clearCookie('jwt')
-        }
         res.redirect('/faculty/list')
     } catch (err) {
         res.redirect('/faculty/list')
@@ -101,6 +89,7 @@ async function insertRecord(req, res) {
             faculty.entry = req.body.entry;
             faculty.fieldOfInterest = req.body.fieldOfInterest;
             if(req.file) faculty.avatar = req.file.filename;
+            faculty.owner= req.user._id
 
             await faculty.save();
             res.redirect('faculty/list');
@@ -113,10 +102,11 @@ async function insertRecord(req, res) {
                 });
             }
             else
+            console.log(err);
                 res.render("faculty/addOrEdit", {
                     viewTitle: "Insert Faculty",
                     faculty: req.body,
-                    message: 'Email already been used'
+                    message: 'Email already been used or some unwanted error'
                 });
         }
     }
@@ -141,7 +131,7 @@ async function updateRecord(req, res) {
             }
         }
 
-        await Faculty.findOneAndUpdate({ _id: req.body._id }, data, { new: true })
+        await Faculty.findOneAndUpdate({ _id: req.body._id}, data, { new: true })
         res.redirect('/faculty/list')
     } catch (err) {
         if (err.name == 'ValidationError') {
@@ -208,19 +198,30 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/faculty/:id', auth, async (req, res) => {
-    const doc = await Faculty.findById(req.params.id)
+    try{
+    const doc = await Faculty.findOne({ _id: req.params.id, owner: req.user._id })
+    if (!doc) {
+        throw new Error()
+    }
     res.render("faculty/addOrEdit", {
         viewTitle: "Update Faculty",
         faculty: doc
     });
+} catch (err) {
+    res.redirect('/faculty/list')
+}
 });
 
 router.get('/faculty/delete/:id', auth, async (req, res) => {
     try {
-        const doc = await Faculty.findByIdAndRemove(req.params.id);
+        const doc = await Faculty.findOneAndDelete({ _id: req.params.id , owner: req.user._id})
+        if (!doc) {
+            throw new Error()
+        }
         res.redirect('/faculty/list')
+        console.log('check')
     } catch (err) {
-        console.log('Error in faculty delete :' + err);
+        res.redirect('/faculty/list')
     }
 });
 

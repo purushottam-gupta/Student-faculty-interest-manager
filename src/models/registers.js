@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator')
+const Faculty = require('./faculty')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -39,6 +40,12 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
+})
+
+userSchema.virtual('faculties',{
+    ref: 'Faculty',
+    localField: '_id',
+    foreignField: 'owner'
 })
 
 userSchema.pre('save', async function(next) {

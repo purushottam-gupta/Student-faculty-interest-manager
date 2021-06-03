@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator')
+const registers = require('./registers')
 
 var facultySchema = new mongoose.Schema({
     fullName: {
@@ -31,6 +32,11 @@ var facultySchema = new mongoose.Schema({
     },
     avatar: {
         type: String
+    },
+    owner:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Register',
+        required: true
     }
 });
 

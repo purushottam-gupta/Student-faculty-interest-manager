@@ -6,6 +6,8 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const facultyRouter = require('./faculty')
 const hbs = require('hbs')
+const Newfaculty = require('../models/newfaculty')
+const Faculty = require('../models/faculty')
 
 function handleValidationError(err, body) {
     for (field in err.errors) {
@@ -111,5 +113,17 @@ router.get('/logout', auth, async (req, res) => {
     }
 })
 
+router.get('/user/delete', auth, async (req, res) => {
+
+    try {
+        await Newfaculty.findOneAndDelete({ email: req.user.email })
+        await Faculty.findOneAndDelete({ owner: req.user._id })
+        await req.user.remove()
+        res.clearCookie('jwt')
+        res.redirect('/')
+    } catch (e) {
+        console.log('Error' + e);
+    }
+})
 
 module.exports = router

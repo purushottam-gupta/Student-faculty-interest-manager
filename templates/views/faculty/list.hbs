@@ -21,123 +21,165 @@
 
 </head>
 
-<body class="bg-info container-fluid">
-    <div class="row">
-        <input type="text" class="form-control mt-1 col-lg-8 offset-lg-2" id="myInput" onkeyup="searchFun()"
-            placeholder="Search by name or field of Interest...">
-        <div class="col-lg-8 offset-lg-2" id="col" style="background-color:#fff;margin-top:25px;padding:20px;">
-            <h3 class="d-inline"><a class="btn btn-secondary d-none {{display}}" href="/faculty"><i
-                        class="fa fa-plus"></i> Create New</a>
-                Faculty List</h3>
-            <button class="btn btn-warning d-none {{display}} float-right"><a href="/logout"
-                    class="text-light text-decoration-none">Logout</a></button>
-            <button class="btn btn-primary {{disnone}} float-right mr-2"><a href="/faculty/list"
-                    class="text-light text-decoration-none">Sign-in as Faculty</a></button>
-            <button type="button" class="btn btn-primary d-none {{display}} float-right mr-2" data-toggle="modal"
-                data-target="#exampleModal">Add New
-                Faculty</button>
-                 <button class="btn btn-danger d-none {{display}} float-right mr-2" onclick="return confirm('Are you sure to delete your account permanently?');"><a href="/user/delete" class="text-decoration-none text-light">Delete My account</a></button>
-            <table class="table table-striped mt-2 overflow-hidden">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">Profile Pic</th>
-                        <th class="text-nowrap">Full Name</th>
-                        {{!-- <th class="text-nowrap">Email</th> --}}
-                        <th class="text-nowrap">Max. Entry</th>
-                        <th class="text-nowrap">Field of Interest</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each list}}
-                    <tr>
-                        <td>
-                            {{#if this.avatar}}
-                                <img class="border border-dark" src="../uploads/{{this.avatar}}" alt="profile pic" width="80" height="80">
-                            {{else}}    
-                                <img class="border border-dark" src="../uploads/iStock-476085198.jpg" alt="profile pic" width="80" height="80">
-                            {{/if}}
-                        </td>
-                        <td>{{this.fullName}}</td>
-                        {{!-- <td>{{this.email}}</td> --}}
-                        <td>{{this.entry}}</td>
-                        <td>{{this.fieldOfInterest}}</td>
-                        <td class="text-nowrap">
-                            <a href="/faculty/{{this._id}}" class="text-decoration-none mr-1"><i
-                                    class="fa fa-pencil fa-lg d-none {{../display}}" aria-hidden="true"></i></a>
-                            <a href="/faculty/delete/{{this._id}}" class="text-decoration-none"
-                                onclick="return confirm('Are you sure to delete this record ?');"><i
-                                    class="fa fa-trash fa-lg d-none {{../display}}" aria-hidden="true"></i></a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-outline-info {{../disnone}} p-1 m-0 text-nowrap"
-                                data-toggle="modal" data-target="#Modal2{{this._id}}">Send
-                                Request<i class="fa fa-paper-plane fa-lg pl-1"></i></button>
-                            <div class="modal" id="Modal2{{this._id}}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-body">
-                                                <form action='/{{this._id}}' id="myForm{{this._id}}" method="POST">
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-form-label">Your Name</label>
-                                                        <input type="name" name="name" class="form-control" required
-                                                            autocomplete="off">
-                                                        <label for="email" class="col-form-label">Your Email</label>
-                                                        <input type="email" name="email" class="form-control" required
-                                                            autocomplete="off">
-                                                        <label for="purpose" class="col-form-label">Purpose of
-                                                            Email(write in 1-2 words)</label>
-                                                        <input type="text" name="purpose" class="form-control"
-                                                            placeholder="like project, internship or else" required>
-                                                        <label for="year" class="col-form-label">Which year you are
-                                                            in</label>
-                                                        <input type="text" name="year" class="form-control"
-                                                            placeholder="like 1st, 2nd ,3rd or 4th">
-                                                        <label for="branch" class="col-form-label">Your branch</label>
-                                                        <input type="text" name="branch" class="form-control">
-                                                        <label for="clgName" class="col-form-label">Your college
-                                                            name</label>
-                                                        <input type="text" name="clgName" class="form-control" required>
-                                                    </div>
-                                                    <button type="submit" id="limit{{this._id}}" class="btn btn-primary" onclick="myfns('{{this.entry}}','{{this._id}}')">Send</button>
-                                                </form>
+<body class="bg-info">
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0b1f221f;">
+        <h3 style="font-weight:600"><a class="navbar-brand" href="">
+                <img src="../uploads/logo-iiitu.gif" width="40" height="40" class="d-inline-block logo-img" alt=""
+                    loading="lazy">
+                The mediator | IIIT Una</a></h3>
+            <ul class="navbar-nav ml-auto" style="flex-direction:row;">
+                    <li class="nav-item">
+                        <button class="btn btn-danger d-none {{display}} mr-2"
+                            onclick="return confirm('Are you sure to delete your account permanently?');"><a
+                                href="/user/delete" class="text-decoration-none text-light">Delete My
+                                account</a></button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-primary {{disnone}} mr-2"><a href="/faculty/list"
+                                class="text-light text-decoration-none">Sign-in as Faculty</a></button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-primary d-none {{display}} mr-2" data-toggle="modal"
+                            data-target="#exampleModal">Add New
+                            Faculty</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-warning d-none {{display}} mr-2"><a href="/logout"
+                                class="text-light text-decoration-none">Logout</a></button>
+                    </li>
+            </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input type="search" class="form-control" style="margin: 0px" id="myInput" onkeyup="searchFun()"
+                            placeholder="Search by name or field of Interest...">
+                    </form>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1" id="col" style="background-color:#fff;margin-top:25px;padding:20px;">
+                <h3 class="d-inline"><a class="btn btn-secondary d-none {{display}}" href="/faculty"><i
+                            class="fa fa-plus"></i> Create New</a>
+                    Faculty List</h3>
+                <table class="table table-striped mt-2 overflow-hidden">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">Profile Pic</th>
+                            <th class="text-nowrap">Full Name</th>
+                            {{!-- <th class="text-nowrap">Email</th> --}}
+                            <th class="text-nowrap">Max. Entry</th>
+                            <th class="text-nowrap">Entry Accepted</th>
+                            <th class="text-nowrap">Field of Interest</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list}}
+                        <tr>
+                            <td>
+                                {{#if this.avatar}}
+                                <img class="border border-dark" src="../uploads/{{this.avatar}}" alt="profile pic"
+                                    width="80" height="80">
+                                {{else}}
+                                <img class="border border-dark" src="../uploads/iStock-476085198.jpg" alt="profile pic"
+                                    width="80" height="80">
+                                {{/if}}
+                            </td>
+                            <td>{{this.fullName}}</td>
+                            {{!-- <td>{{this.email}}</td> --}}
+                            <td>{{this.entry}}</td>
+                            <td>{{this.entryAccepted}}</td>
+                            <td>{{this.fieldOfInterest}}</td>
+                            <td class="text-nowrap">
+                                <a href="/faculty/{{this._id}}" class="text-decoration-none mr-1"><i
+                                        class="fa fa-pencil fa-lg d-none {{../display}}" aria-hidden="true"></i></a>
+                                <a href="/faculty/delete/{{this._id}}" class="text-decoration-none"
+                                    onclick="return confirm('Are you sure to delete this record ?');"><i
+                                        class="fa fa-trash fa-lg d-none {{../display}}" aria-hidden="true"></i></a>
+                            </td>
+                            <td>
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-info {{../disnone}} p-1 m-0 text-nowrap"
+                                    data-toggle="modal" data-target="#Modal2{{this._id}}">Send
+                                    Request<i class="fa fa-paper-plane fa-lg pl-1"></i></button>
+                                <div class="modal" id="Modal2{{this._id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-body">
+                                                    <form action='/{{this._id}}' id="myForm{{this._id}}" method="POST">
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-form-label">Your Name</label>
+                                                            <input type="name" name="name" class="form-control" required
+                                                                autocomplete="off">
+                                                            <label for="email" class="col-form-label">Your Email</label>
+                                                            <input type="email" name="email" class="form-control"
+                                                                required autocomplete="off">
+                                                            <label for="purpose" class="col-form-label">Purpose of
+                                                                Email(write in 1-2 words)</label>
+                                                            <input type="text" name="purpose" class="form-control"
+                                                                placeholder="like project, internship or else" required
+                                                                autocomplete="off">
+                                                            <label for="idea" class="col-form-label">Tentative Project
+                                                                Idea
+                                                                (optional)</label>
+                                                            <input type="text" name="idea" class="form-control"
+                                                                placeholder="explain in 1-2 lines" autocomplete="off">
+                                                            <label for="year" class="col-form-label">Which year you are
+                                                                in</label>
+                                                            <input type="text" name="year" class="form-control"
+                                                                placeholder="like 1st, 2nd ,3rd or 4th"
+                                                                autocomplete="off">
+                                                            <label for="branch" class="col-form-label">Your
+                                                                branch</label>
+                                                            <input type="text" name="branch" class="form-control"
+                                                                autocomplete="off">
+                                                            <label for="clgName" class="col-form-label">Your college
+                                                                name</label>
+                                                            <input type="text" name="clgName" class="form-control"
+                                                                required autocomplete="off">
+                                                        </div>
+                                                        <button type="submit" id="limit{{this._id}}"
+                                                            class="btn btn-primary"
+                                                            onclick="myfns('{{this.entry}}','{{this._id}}','{{this.entryAccepted}}')">Send</button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-            <p class="text-danger font-italic">{{message}}</p>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <p class="text-danger font-italic">{{message}}</p>
+            </div>
         </div>
-    </div>
-    <div class="modal" id="exampleModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-body">
-                        <form action='/newfaculty' method="POST">
-                            <div class="form-group">
-                                <label for="name" class="col-form-label">Name of faculty</label>
-                                <input type="name" name="name" class="form-control" autocomplete="off">
-                                <label for="email" class="col-form-label">Email of faculty</label>
-                                <input type="email" name="email" class="form-control" autocomplete="off" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">ADD</button>
-                        </form>
+        <div class="modal" id="exampleModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-body">
+                            <form action='/newfaculty' method="POST">
+                                <div class="form-group">
+                                    <label for="name" class="col-form-label">Name of faculty</label>
+                                    <input type="name" name="name" class="form-control" autocomplete="off">
+                                    <label for="email" class="col-form-label">Email of faculty</label>
+                                    <input type="email" name="email" class="form-control" autocomplete="off" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">ADD</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,11 +191,11 @@
             let tr = document.getElementsByTagName('tr');
 
             for (var i = 0; i < tr.length; i++) {
-                let td3 = tr[i].getElementsByTagName('td')[3]
+                let td4 = tr[i].getElementsByTagName('td')[4]
                 let td1 = tr[i].getElementsByTagName('td')[1];
 
-                if (td3) {
-                    let textvalue = td3.textContext || td3.innerHTML
+                if (td4) {
+                    let textvalue = td4.textContext || td4.innerHTML
                     let textvalue1 = td1.textContext || td1.innerHTML
 
                     if (textvalue.toUpperCase().indexOf(filter) > -1 || textvalue1.toUpperCase().indexOf(filter) > -1) {
@@ -165,11 +207,15 @@
             }
         }
 
-        const myfns = (n,m) => {
-                if (n<=0) {
-                    document.getElementById(`limit${m}`).classList.add("disabled");
-                    document.getElementById(`limit${m}`).disabled = true;
-                }
+        const myfns = (n, m, l) => {
+            if (n <= 0 || n == l) {
+                document.getElementById(`limit${m}`).classList.add("disabled");
+                document.getElementById(`limit${m}`).disabled = true;
+                alert('Oops! I am full.Please reach out to other faculty')
+            }
+            else {
+                alert('Yay! Your request sent successfully, wait for their response.');
+            }
         }
 
     </script>

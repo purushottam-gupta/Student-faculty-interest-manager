@@ -12,31 +12,38 @@
 </head>
 
 <body>
-    <div class="container d-flex">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0b1f221f;">
+        <h3 style="font-weight:600"><a class="navbar-brand" href="">
+                <img src="../uploads/logo-iiitu.gif" width="40" height="40" class="d-inline-block logo-img" alt=""
+                    loading="lazy">
+                The mediator | IIIT Una</a></h3>
+    </nav>
+    <div class="container d-flex mt-3">
         <form action="/register" method="POST" class="mx-auto w-50">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="name" name="name" class="form-control" id="name" value={{user.name}}>
                 <div class="text-danger">
-                        {{user.nameError}}</div>
+                    {{user.nameError}}</div>
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" name="email" class="form-control" id="email" value={{user.email}}>
                 <div class="text-danger">
-                        {{user.emailError}}</div>
+                    {{user.emailError}}</div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" id="password">
                 <div class="text-danger">
-                        {{user.passwordError}}</div>
+                    {{user.passwordError}}</div>
             </div>
             <div class="form-group">
                 <label for="confirmpassword">Confirm Password</label>
-                <input type="confirmpassword" name="confirmpassword" class="form-control" id="confirmpassword" value={{user.confirmpassword}}>
+                <input type="confirmpassword" name="confirmpassword" class="form-control" id="confirmpassword"
+                    value={{user.confirmpassword}}>
                 <div class="text-danger">
-                        {{user.confirmpasswordError}}</div>
+                    {{user.confirmpasswordError}}</div>
             </div>
 
             <p class="text-danger font-italic">{{message}}</p>

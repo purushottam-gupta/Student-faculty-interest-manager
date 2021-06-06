@@ -12,7 +12,13 @@
 </head>
 
 <body>
-    <div class="container d-flex">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0b1f221f;">
+        <h3 style="font-weight:600"><a class="navbar-brand" href="">
+                <img src="../uploads/logo-iiitu.gif" width="40" height="40" class="d-inline-block logo-img" alt=""
+                    loading="lazy">
+                The mediator | IIIT Una</a></h3>
+    </nav>
+    <div class="container d-flex mt-3">
         <form action="/login" method="POST" class="mx-auto w-50">
             <div class="form-group">
                 <label for="email">Email address</label>
@@ -24,7 +30,7 @@
             </div>
 
             <p class="text-danger font-italic">{{message}}</p>
-           
+
             <button type="submit" class="btn btn-primary">Sign in</button>
             Don't have account? <a href="/register">Sign up</a>.
             <p>Or want to see Faculty list? <a href="/">Faculty List</a>.</p>

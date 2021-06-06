@@ -69,7 +69,6 @@ async function insertRecord(req, res) {
         var faculty = await Faculty.findOne({
             fullname: req.body.fullname,
             email: req.body.email,
-            entry: req.body.entry,
             fieldOfInterest: req.body.fieldOfInterest
         })
 
@@ -87,6 +86,7 @@ async function insertRecord(req, res) {
             faculty.fullName = req.body.fullName;
             faculty.email = req.body.email;
             faculty.entry = req.body.entry;
+            faculty.entryAccepted = req.body.entryAccepted;
             faculty.fieldOfInterest = req.body.fieldOfInterest;
             if(req.file) faculty.avatar = req.file.filename;
             faculty.owner= req.user._id
@@ -102,7 +102,6 @@ async function insertRecord(req, res) {
                 });
             }
             else
-            console.log(err);
                 res.render("faculty/addOrEdit", {
                     viewTitle: "Insert Faculty",
                     faculty: req.body,
@@ -119,6 +118,7 @@ async function updateRecord(req, res) {
                 fullName: req.body.fullName,
                 email: req.body.email,
                 entry: req.body.entry,
+                entryAccepted: req.body.entryAccepted,
                 fieldOfInterest: req.body.fieldOfInterest,
                 avatar: req.file.filename
             }
@@ -127,6 +127,7 @@ async function updateRecord(req, res) {
                 fullName: req.body.fullName,
                 email: req.body.email,
                 entry: req.body.entry,
+                entryAccepted: req.body.entryAccepted,
                 fieldOfInterest: req.body.fieldOfInterest
             }
         }
@@ -160,6 +161,9 @@ function handleValidationError(err, body) {
                 break;
             case 'entry':
                 body['entryError'] = err.errors[field].message;
+                break;
+            case 'entryAccepted':
+                body['entryAcceptedError'] = err.errors[field].message;
                 break;
             default:
                 break;
@@ -219,7 +223,6 @@ router.get('/faculty/delete/:id', auth, async (req, res) => {
             throw new Error()
         }
         res.redirect('/faculty/list')
-        console.log('check')
     } catch (err) {
         res.redirect('/faculty/list')
     }
@@ -227,8 +230,9 @@ router.get('/faculty/delete/:id', auth, async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     try {
-        const doc = await Faculty.findByIdAndUpdate({ _id: req.params.id }, { $inc: { entry: -1 } }, { new: true })
-        sendWelcomeEmail(doc.email, req.body.email, req.body.name, req.body.year, req.body.branch, req.body.clgName, req.body.purpose)
+        // const doc = await Faculty.findByIdAndUpdate({ _id: req.params.id }, { $inc: { entry: -1 } }, { new: true })
+        const doc = await Faculty.findById(req.params.id)
+        sendWelcomeEmail(doc.email, req.body.email, req.body.name, req.body.year, req.body.branch, req.body.clgName, req.body.purpose, req.body.idea)
         res.redirect('/')
     } catch (err) {
         res.redirect('/')

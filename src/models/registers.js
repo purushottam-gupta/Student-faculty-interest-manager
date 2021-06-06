@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
+        required: 'This field is required.',
         trim: true,
         lowercase: true,
         validate(value) {
@@ -26,12 +27,14 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+        required: 'This field is required.',
         trim: true,
         minLength: 6
     },
     confirmpassword: {
         type: String,
         required: true,
+        required: 'This field is required.',
         trim: true
     },
     tokens: [{ 

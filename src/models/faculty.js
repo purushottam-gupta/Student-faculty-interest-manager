@@ -25,6 +25,10 @@ var facultySchema = new mongoose.Schema({
         type: Number,
         required: 'This field is required.'
     },
+    entryAccepted: {
+        type: Number,
+        required: 'This field is required.'
+    },
     fieldOfInterest: {
         type: String,
         required: 'This field is required.',
